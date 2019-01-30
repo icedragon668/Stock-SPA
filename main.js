@@ -50,15 +50,7 @@ const addButton = function (event) {
   } else { console.log('Not A Stock')} // okay, so that wasnt pretty
 }
 
-/*4. Make a separate iexTrading API call that will retrieve all stock symbols available in iexTrading and store it into an array called `validationList`. */
 
-/*4. Add a form to your page that takes the value from a user input box and adds it into your `stocksList` array only if the input exists in our `validationList`. Hint: You'll want to make sure the user input is always capitalized. Then make a function call that takes each topic in the array remakes the buttons on the page.*/
-
-//stockList is initial list
-//validationList is the check
-// create a name/symbol check funcution/array
-//make button that adds new button
-// new button displays stock info
 // company, logo, price news10
 //function Lv2: mobile
 //LV2: additional content on request: append more articles
@@ -66,28 +58,12 @@ const addButton = function (event) {
 //lv3: additiona api like nyt (reference)
 //lv4: localStorage of favorites
 //the #$%^ing readme
-/*
-* [About READMEs](https://help.github.com/articles/about-readmes/)
+/*[About READMEs](https://help.github.com/articles/about-readmes/)*/
 
-forEach!
-const array = [1,2,3,4]
-array.forEach(function (value,i) {
-  console.log(value)l
-});
-1 2 3 4 is returned
-
-arrow function changes .this
-
-* [Mastering Markdown](https://guides.github.com/features/mastering-markdown/)
-*/
-
-//range10m last10
-symbol = "taco"
-
+/* [Mastering Markdown](https://guides.github.com/features/mastering-markdown/)*/
 
 const stockInfo = function () {
-  const stock = $(this).attr('data-name');
-  console.log(stock)
+  const symbol = $(this).attr('data-name');
   const stockCard = `/stock/${symbol}/batch?types=quote,logo,news&range=10m&last=10`
   let qURL = `${endpoint}${stockCard}`
   $.ajax({
@@ -99,17 +75,34 @@ const stockInfo = function () {
     ${response.logo.url}, 
     ${response.quote.latestPrice},
     ${response.news[0].headline}
-    hey`) //loop news x10
+    `) //loop news x10
+    const stockCard = $('<div>');
+    stockCard.append(`<h2>${response.quote.companyName}</h2>`);
+    stockCard.append(`<h4>${response.quote.symbol}</h4>`);
+    stockCard.append(`<h6>Latest Price: $${response.quote.latestPrice}</h6>`);
+    stockCard.append(`<img class='logo' src='${response.logo.url}' />`)
+    for (i=0;i<11;i++) {
+    let newsHead = response.news[i].headline;
+    let newsDate = response.news[i].datetime;
+    let newsSummary = response.news[i].summary;
+    let newsUrl = response.news[i].url
+    stockCard.append(`
+    <div class='newsCard'
+    <h3>Headline: ${newsHead}</h3>
+    <h5>Date: ${newsDate}</h3>
+    <p><a href="${newsUrl}" target="_blank">link to article here</a></p>
+    <p>${newsSummary}</p>
+    </div
+    `)
+    $('#stockCards').html(stockCard)
+    }
   });
-
 }
 
 $('#addStock').on('click', addButton);
-//click a stock button!
-$('WTFISMYSTOCKBUTTONCALLED').on('click', stockInfo)
+$('#stockButtons').on('click', '.stock', stockInfo)
 
 stockListAll()
-stockInfo()
 render()
 /*
 
