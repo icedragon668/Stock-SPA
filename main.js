@@ -1,28 +1,121 @@
+let symbol = ''
+let validationList= [];
+let valid = 0
+
 const endpoint = "https://api.iextrading.com/1.0"
 const symbolList = "/ref-data/symbols"
-// company, logo, price news10
-let symbol = ''
-symbol = "taco"
-const stockCard = `/stock/${symbol}/batch?types=quote,logo,news&range=10`
-let qURL = `${endpoint}${stockCard}`
-const stockInfo = function () {
-$.ajax({
-    url:qURL,
+
+const stockList = ['FB', 'AAPL', 'TSLA', 'GOOG']
+
+const stockListAll = function () {
+  let qURL = `${endpoint}${symbolList}`;
+  $.ajax({
+    url: qURL,
     method: 'GET'
-}).then(function(response){
+  }).then(function (response) {
+    for (let i = 0; i<response.length; i++){
+      validationList.push(response[i].symbol)
+    } return validationList;
+  });
+}
+
+const render = function () {
+  $('#stockButtons').empty();
+  for (let i = 0; i < stockList.length; i++) {
+    let newButton = $('<button>');
+    newButton.addClass('stock');
+    newButton.attr('data-name', stockList[i]); //.attr and data-name from lecture
+    newButton.text(stockList[i]);
+    $('#stockButtons').append(newButton);
+  }
+}
+
+const addButton = function (event) {
+  event.preventDefault();
+  valid = 0;
+  for (i=0;i<validationList.length;i++){  //now with validation!
+    let stock = $('#stockInput').val().trim();
+    stock = stock.toUpperCase();
+    if (stock === validationList[i]){
+       valid = 1;}}
+  if ($('#stockInput').val().trim() === '') {
+    console.log("Forgot Input!")
+  } else if (valid == 1) {
+    console.log(valid)
+    stock = $('#stockInput').val().trim();
+    stock = stock.toUpperCase();
+    stockList.push(stock)
+    $('#stockInput').val('')
+    render()
+  } else { console.log('Not A Stock')} // okay, so that wasnt pretty
+}
+
+/*4. Make a separate iexTrading API call that will retrieve all stock symbols available in iexTrading and store it into an array called `validationList`. */
+
+/*4. Add a form to your page that takes the value from a user input box and adds it into your `stocksList` array only if the input exists in our `validationList`. Hint: You'll want to make sure the user input is always capitalized. Then make a function call that takes each topic in the array remakes the buttons on the page.*/
+
+//stockList is initial list
+//validationList is the check
+// create a name/symbol check funcution/array
+//make button that adds new button
+// new button displays stock info
+// company, logo, price news10
+//function Lv2: mobile
+//LV2: additional content on request: append more articles
+//lv2: metadata: ceo, tags etcs
+//lv3: additiona api like nyt (reference)
+//lv4: localStorage of favorites
+//the #$%^ing readme
+/*
+* [About READMEs](https://help.github.com/articles/about-readmes/)
+
+forEach!
+const array = [1,2,3,4]
+array.forEach(function (value,i) {
+  console.log(value)l
+});
+1 2 3 4 is returned
+
+arrow function changes .this
+
+* [Mastering Markdown](https://guides.github.com/features/mastering-markdown/)
+*/
+
+//range10m last10
+symbol = "taco"
+
+
+const stockInfo = function () {
+  const stock = $(this).attr('data-name');
+  console.log(stock)
+  const stockCard = `/stock/${symbol}/batch?types=quote,logo,news&range=10m&last=10`
+  let qURL = `${endpoint}${stockCard}`
+  $.ajax({
+    url: qURL,
+    method: 'GET'
+  }).then(function (response) {
     console.log(`
     ${response.quote.companyName}, 
     ${response.logo.url}, 
     ${response.quote.latestPrice},
     ${response.news[0].headline}
-    `)
-});
+    hey`) //loop news x10
+  });
 
 }
 
+$('#addStock').on('click', addButton);
+//click a stock button!
+$('WTFISMYSTOCKBUTTONCALLED').on('click', stockInfo)
+
+stockListAll()
 stockInfo()
+render()
+/*
 
+*/
 
+///////////QUERY INFO/////////////////////////
 // news last ten: stock/market/news/last/10
 /* contents
 [
