@@ -5,7 +5,7 @@ let valid = 0
 const endpoint = "https://api.iextrading.com/1.0"
 const symbolList = "/ref-data/symbols"
 
-const stockList = ['FB', 'AAPL', 'TSLA', 'GOOG']
+const stockList = ['FB', 'AAPL', 'TSLA', 'AMZN']
 
 const stockListAll = function () {
   let qURL = `${endpoint}${symbolList}`;
@@ -64,30 +64,24 @@ const addButton = function (event) {
 
 const stockInfo = function () {
   const symbol = $(this).attr('data-name');
-  const stockCard = `/stock/${symbol}/batch?types=quote,logo,news&range=10m&last=10`
+  const stockCard = `/stock/${symbol}/batch?types=quote,logo,news`
   let qURL = `${endpoint}${stockCard}`
-  $.ajax({
+  $.ajax({  
     url: qURL,
     method: 'GET'
   }).then(function (response) {
-    console.log(`
-    ${response.quote.companyName}, 
-    ${response.logo.url}, 
-    ${response.quote.latestPrice},
-    ${response.news[0].headline}
-    `) //loop news x10
     const stockCard = $('<div>');
     stockCard.append(`<h2>${response.quote.companyName}</h2>`);
     stockCard.append(`<h4>${response.quote.symbol}</h4>`);
     stockCard.append(`<h6>Latest Price: $${response.quote.latestPrice}</h6>`);
     stockCard.append(`<img class='logo' src='${response.logo.url}' />`)
-    for (i=0;i<11;i++) {
+    for (i=0;i<11;i++) {  //change 11 to var for additional blocks
     let newsHead = response.news[i].headline;
     let newsDate = response.news[i].datetime;
     let newsSummary = response.news[i].summary;
     let newsUrl = response.news[i].url
     stockCard.append(`
-    <div class='newsCard'
+    <div class='newsCard card'
     <h3>Headline: ${newsHead}</h3>
     <h5>Date: ${newsDate}</h3>
     <p><a href="${newsUrl}" target="_blank">link to article here</a></p>
