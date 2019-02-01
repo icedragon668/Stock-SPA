@@ -71,22 +71,24 @@ const stockInfo = function () {
     method: 'GET'
   }).then(function (response) {
     const stockCard = $('<div>');
-    stockCard.append(`<h2>${response.quote.companyName}</h2>`);
-    stockCard.append(`<h4>${response.quote.symbol}</h4>`);
-    stockCard.append(`<h6>Latest Price: $${response.quote.latestPrice}</h6>`);
-    stockCard.append(`<img class='logo' src='${response.logo.url}' />`)
+    stockCard.append(`
+      <div class="card col-5"><h2>${response.quote.companyName}</h2>
+      <h4>${response.quote.symbol}</h4>
+      <h6>Latest Price: $${response.quote.latestPrice}</h6></div>
+      `);
+      stockCard.append(`<p style="float:left" class="col-5"><img class='logo' src='${response.logo.url}' /></p>`)
     for (i=0;i<11;i++) {  //change 11 to var for additional blocks
     let newsHead = response.news[i].headline;
     let newsDate = response.news[i].datetime;
     let newsSummary = response.news[i].summary;
     let newsUrl = response.news[i].url
     stockCard.append(`
-    <div class='newsCard card'
+    <div class='newsCard card col-5'
     <h3>Headline: ${newsHead}</h3>
     <h5>Date: ${newsDate}</h3>
     <p><a href="${newsUrl}" target="_blank">link to article here</a></p>
     <p>${newsSummary}</p>
-    </div
+    </div>
     `)
     $('#stockCards').html(stockCard)
     }

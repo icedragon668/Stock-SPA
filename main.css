@@ -1,0 +1,9 @@
+.card {
+    float: left;
+}
+
+.newsCard {
+    height: 300px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
