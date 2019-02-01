@@ -74,7 +74,9 @@ const stockInfo = function () {
     stockCard.append(`
       <div class="card col-5"><h2>${response.quote.companyName}</h2>
       <h4>${response.quote.symbol}</h4>
+      <h7>Sector: ${response.quote.sector}</h7>
       <h6>Latest Price: $${response.quote.latestPrice}</h6></div>
+      
       `);
       stockCard.append(`<p style="float:left" class="col-5"><img class='logo' src='${response.logo.url}' /></p>`)
     for (i=0;i<11;i++) {  //change 11 to var for additional blocks
